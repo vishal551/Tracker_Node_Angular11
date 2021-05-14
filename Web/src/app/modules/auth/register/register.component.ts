@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { CommonService } from 'src/app/services/common.service';
 import { MustMatch } from '../../_helpers/must-match.validator';
 
 @Component({
@@ -11,9 +13,12 @@ import { MustMatch } from '../../_helpers/must-match.validator';
 export class RegisterComponent implements OnInit {
   Step1: FormGroup;
   submitted = false;
+
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private commonService: CommonService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -37,19 +42,42 @@ export class RegisterComponent implements OnInit {
     );
   }
 
-  // get f() { return this.Step1.controls; }
-
   onSubmit(): void {
     this.submitted = true;
     if (this.Step1.invalid) {
       return;
     }
     this.authService.register(this.Step1.value).subscribe(
-      (res) => {
-        alert('SUCCESS!! :-)\n\n' + JSON.stringify(res, null, 4));
+      (res: any) => {
+        if (res.status) {
+          this.commonService.toastrMessage(
+            'success',
+            'Registration Successful!',
+            {
+              positionClass: 'toast-top-center',
+            }
+          );
+          this.router.navigate(['/verify'], {
+            state: { data: this.Step1.value.email },
+          });
+        }
       },
-      (error) => {
-        alert('ERROR!! :-)\n\n' + JSON.stringify(error, null, 4));
+      (error: any) => {
+        if (error.status === 400) {
+          if (error.error.data[0].msg) {
+            this.commonService.toastrMessage('error', error.error.data[0].msg, {
+              positionClass: 'toast-top-center',
+            });
+          }
+        } else {
+          this.commonService.toastrMessage(
+            'error',
+            'Please try after sometime',
+            {
+              positionClass: 'toast-top-center',
+            }
+          );
+        }
       }
     );
   }

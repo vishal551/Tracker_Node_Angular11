@@ -5,19 +5,29 @@ import { RegisterComponent } from './register/register.component';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth.component';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
+import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 
 const authRoutes: Routes = [
-  { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
   {
-    path: 'sign-up',
+    path: 'register',
     component: RegisterComponent,
+    pathMatch: 'full',
+  },
+  {
+    path: 'verify',
+    component: VerifyemailComponent,
     pathMatch: 'full',
   },
 ];
 
 @NgModule({
-  declarations: [AuthComponent, LoginComponent, RegisterComponent],
+  declarations: [
+    AuthComponent,
+    LoginComponent,
+    RegisterComponent,
+    VerifyemailComponent,
+  ],
   imports: [SharedModule, CommonModule, RouterModule.forChild(authRoutes)],
 })
 export class AuthModule {}

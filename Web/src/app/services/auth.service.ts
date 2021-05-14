@@ -19,4 +19,12 @@ export class AuthService {
       .map((response) => response)
       .catch((error) => throwError(error));
   }
+  VerifyOTP(data): Observable<object> {
+    const url = AppConstants.VERIFY_OTP;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http
+      .post(url, data, { headers: headers })
+      .map((response) => response)
+      .catch((error) => throwError(error));
+  }
 }

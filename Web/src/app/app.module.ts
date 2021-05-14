@@ -30,7 +30,8 @@ import {
 import { AuthModule } from './modules/auth/auth.module';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './modules/auth/auth.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr';
 
 const routes: Routes = [
   {
@@ -93,6 +94,7 @@ const routes: Routes = [
     NgbTabsetModule,
     AuthModule,
     RouterModule,
+    ToastrModule.forRoot(),
     RouterModule.forRoot(routes),
   ],
   providers: [NavigationItem],
